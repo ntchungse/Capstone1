@@ -3,12 +3,7 @@ from pprint import pprint as pp
 from config import EMAIL, PASSWORD
 from crawlposts import getPostsURL as getURLs
 def main():
-    getURLs()
-    urls = []
-    with open('output.txt') as f:
-        for line in f:
-            urls.append(line.replace("\n",""))
-
+    urls = getURLs()
     # Instantiate an object
     fps = Fps(EMAIL, PASSWORD, post_url_text='Full Story')
 

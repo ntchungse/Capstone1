@@ -66,7 +66,8 @@ def getPostsURL():
         last_height = new_height
     elements = browser.find_elements_by_css_selector("._3084")
     urls = [el.get_attribute("href") for el in elements]
-
+    
     browser.close()
+    return urls
 
 
