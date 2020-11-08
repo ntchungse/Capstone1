@@ -3,7 +3,10 @@ from time import sleep
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from config import EMAIL, PASSWORD
+from selenium.webdriver.support.wait import WebDriverWait
 import random
+import time
+from selenium import webdriver
 
 #config option
 option = Options()
@@ -14,7 +17,7 @@ option.add_argument("--disable-extensions")
 option.add_experimental_option("prefs", { 
     "profile.default_content_setting_values.notifications": 1 
 })
-browser = webdriver.Chrome(chrome_options=option,executable_path="./chromedriver.exe")
+browser = webdriver.Chrome(options=option,executable_path="./chromedriver.exe")
 
 #Login Function
 def login():
@@ -30,28 +33,14 @@ def login():
 
 def getPostsURL():
     login()
-    browser.get("https://www.facebook.com/groups/vieclamCNTTDaNang/")
+    browser.get("https://www.facebook.com/groups/368698476630471/search/?q=job")
 
     sleep(random.randint(5,10))
 
-    # Search JOB
-    txtSearch = browser.find_element_by_xpath("/html/body/div[1]/div[3]/div[1]/div/div[2]/div[1]/div/div/div/form/span/span/input")
-    txtSearch.send_keys("job")
-    txtSearch.send_keys(Keys.ENTER)
-    sleep(random.randint(10,20))
     #Tick newest posts
-    browser.find_element_by_xpath("/html/body/div[1]/div[3]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/span/div/div/div[3]/div/a[2]").click()
-    sleep(random.randint(10,20))
-    # Choose Date
-    chooseDate = browser.find_element_by_xpath("/html/body/div[1]/div[3]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/span/div/div/div[6]/div/div[1]")
-    chooseDate.click()
-    # Choose Month
-    chooseMonth = browser.find_element_by_xpath("/html/body/div[1]/div[3]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/span/div/div/div[6]/div/div[2]/span/div[1]/input")
-    browser.find_element_by_xpath("/html/body/div[1]/div[3]/div[1]/div/div[2]/div[1]/div/div/div/div[3]/span/div/div/div[6]/div/div[2]/span/div[1]/div").click()
-    sleep(random.randint(10,20))
-    browser.find_element_by_xpath("/html/body/div[1]/div[3]/div[3]/div/div/div/ul/li[9]/a").click()
-    sleep(random.randint(5,10))
-    # Get scroll height
+    browser.find_element_by_xpath("//input[@aria-label='Gần đây nhất']").click();
+    sleep(random.randint(3,7))
+    #Get scroll height
     last_height = browser.execute_script("return document.body.scrollHeight")
     while True:
         # Scroll down to bottom
@@ -64,9 +53,8 @@ def getPostsURL():
             print("Finished...")
             break
         last_height = new_height
-    elements = browser.find_elements_by_css_selector("._3084")
+    elements = browser.find_elements_by_xpath("//div[@role='article']/div/div/div/div/div[3]/a[@role='link']")
     urls = [el.get_attribute("href") for el in elements]
-    
     browser.close()
     return urls
 
